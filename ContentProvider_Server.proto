@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+service ContentProvider_Server{
+    rpc TransmitFile (TransmitFileRequest) returns (TransmitFileResponse);
+    rpc GetFile (GetFileRequest) returns (GetFileResponse);
+    rpc replicateFile (syncFileRequest) returns (syncFileResponse);
+    rpc HandleForwardRequest(serverToServerRequest) returns (serverToServerResponse);
+}
+
+message TransmitFileRequest{
+    string fileName = 1;
+    string fileContent = 2;
+}
+
+message TransmitFileResponse{
+    string transmitStatus = 1;
+}
+
+message GetFileRequest{
+    string fileName = 1;   
+}
+
+message GetFileResponse{
+    string fileName = 1; 
+    string fileContent = 2;
+}
+
+message syncFileRequest{
+    repeated string fileNameList = 1;
+}
+
+message syncFileResponse{
+    repeated string fileNameList = 1;
+}
+
+message serverToServerRequest{
+    string fileName = 1;
+    string ipAddress = 2;
+}
+
+message serverToServerResponse{
+    string fileName = 1; 
+    string fileContent = 2;
+}
