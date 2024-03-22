@@ -11,6 +11,7 @@ NEARBY_SERVER_IP = ''
 NEARBY_SERVER_PORT = ''
 MY_HOSTNAME = socket.gethostname()
 MY_IP = socket.gethostbyname(MY_HOSTNAME)
+MY_IP = MY_IP + ':12000'
 
 class FileTransmitService(ContentProvider_Server_pb2_grpc.ContentProvider_ServerServicer):
     def TransmitFile(self, request, context):
@@ -44,7 +45,7 @@ class FileTransmitService(ContentProvider_Server_pb2_grpc.ContentProvider_Server
                     channel.close()
                     if(response.fileContent != "File Not Found in server"):
                         fileread.fileWrite(response.fileName, response.fileContent)
-                        response = ContentProvider_Server_pb2.serverToServerResponse(fileName = request.fileName, fileContent = fileContent)
+                        response = ContentProvider_Server_pb2.serverToServerResponse(fileName = request.fileName, fileContent = response.fileContent)
                         return response
                 
                 except Exception as ex:
@@ -72,7 +73,7 @@ class FileTransmitService(ContentProvider_Server_pb2_grpc.ContentProvider_Server
                     channel.close()
                     if(response.fileContent != "File Not Found in server"):
                         fileread.fileWrite(response.fileName, response.fileContent)
-                        response = ContentProvider_Server_pb2.GetFileResponse(fileName = request.fileName, fileContent = fileContent)
+                        response = ContentProvider_Server_pb2.GetFileResponse(fileName = request.fileName, fileContent = response.fileContent)
                         return response
                 
                 except Exception as ex:
@@ -90,7 +91,7 @@ def syncFiles():
     if(len(fileList) > 0):
         for server in serverConfig.serverList:
             IP_ADDRESS = server.split(":")[0]
-            if(MY_IP != IP_ADDRESS):
+            if(MY_IP.split(":")[0] != IP_ADDRESS):
                 try:
                     channel = grpc.insecure_channel(server)
                     stub = ContentProvider_Server_pb2_grpc.ContentProvider_ServerStub(channel)
@@ -102,7 +103,7 @@ def syncFiles():
                             if(response.transmitStatus == 'Success'):
                                 print("Successfully replicated file : " + file + " in server : " + server)
                             else:
-                                print("Error in file replication will retry in 30 seconds ")
+                                print("Error in file replication will retry in 300 seconds ")
                     else:
                         print("Files are already replicated in server : " + server)
 
@@ -118,11 +119,11 @@ def serve(serverPort):
     server.start()
     try:
         while True:
-            time.sleep(10)
+            time.sleep(300)
             syncFiles()
     except KeyboardInterrupt:
         server.stop(0)
 
 if __name__ == '__main__':
-    serverPort = '12001'
+    serverPort = '12000'
     serve(serverPort)

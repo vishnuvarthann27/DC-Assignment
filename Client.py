@@ -3,8 +3,8 @@ from concurrent import futures
 import ContentProvider_Server_pb2
 import ContentProvider_Server_pb2_grpc
 
-NEARBY_SERVER_IP = ''
-NEARBY_SERVER_PORT = ''
+NEARBY_SERVER_IP = 'localhost'
+NEARBY_SERVER_PORT = '12000'
 
 def getFileFromServer(fileName):
     channel = grpc.insecure_channel(NEARBY_SERVER_IP + ':' + NEARBY_SERVER_PORT)
@@ -17,13 +17,12 @@ def serve():
     while True:
         try:
             fileName = input('Enter File Name To Retrieve From Server : ')
-            fileContent = getFileFromServer(fileName)
-            print(fileContent)
+            getFileFromServer(fileName)
         except Exception as ex:
             print("Error Retriving File")
             continue
 
 if __name__ == '__main__':
-    NEARBY_SERVER_IP = input('Enter Nearby Server IP : ')
-    NEARBY_SERVER_PORT = input('Enter Nearby Server Port : ')
+    #NEARBY_SERVER_IP = input('Enter Nearby Server IP : ')
+    #NEARBY_SERVER_PORT = input('Enter Nearby Server Port : ')
     serve()

@@ -1,12 +1,38 @@
-serverList = ["localhost:12000"
-              ,"localhost:12001"
-              ,"localhost:12002"
+# serverList = ["172.31.11.239:12000"
+#               ,"172.31.15.133:12000"
+#               ,"172.31.15.193:12000"
+#               ]
+
+# clusterEdges = [
+#     ["172.31.11.239:12000","172.31.15.133:12000", 4],
+#     ["172.31.15.133:12000","172.31.15.193:12000", 2],
+#     ["172.31.11.239:12000","172.31.15.193:12000", 4]
+# ]
+
+
+import configparser
+
+CONFIG_FILE = configparser.ConfigParser()
+CONFIG_FILE.read("config.properties")
+
+SERVER_IP1 = CONFIG_FILE.get("server1", "ip")
+SERVER_PORT1 = CONFIG_FILE.get("server1", "port")
+
+SERVER_IP2 = CONFIG_FILE.get("server2", "ip")
+SERVER_PORT2 = CONFIG_FILE.get("server2", "port")
+
+SERVER_IP3 = CONFIG_FILE.get("server3", "ip")
+SERVER_PORT3 = CONFIG_FILE.get("server3", "port")
+
+serverList = [SERVER_IP1+":"+SERVER_PORT1
+              ,SERVER_IP2+":"+SERVER_PORT2
+              ,SERVER_IP3+":"+SERVER_PORT3
               ]
 
 clusterEdges = [
-    ["localhost:12000","localhost:12001", 4],
-    ["localhost:12001","localhost:12002", 2],
-    ["localhost:12000","localhost:12002", 4]
+    [SERVER_IP1+":"+SERVER_PORT1,SERVER_IP2+":"+SERVER_PORT2, 4],
+    [SERVER_IP2+":"+SERVER_PORT2,SERVER_IP3+":"+SERVER_PORT3, 2],
+    [SERVER_IP1+":"+SERVER_PORT1,SERVER_IP3+":"+SERVER_PORT3, 4]
 ]
 
 class Graph:

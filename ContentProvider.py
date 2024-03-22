@@ -2,11 +2,11 @@ import grpc
 from concurrent import futures
 import ContentProvider_Server_pb2
 import ContentProvider_Server_pb2_grpc
-import socket
+#import socket
 import fileread
 
-NEARBY_SERVER_IP = ''
-NEARBY_SERVER_PORT = ''
+NEARBY_SERVER_IP = 'localhost'
+NEARBY_SERVER_PORT = '12000'
 
 def transmitFile(fileName, fileContent):
     channel = grpc.insecure_channel(NEARBY_SERVER_IP + ':' + NEARBY_SERVER_PORT)
@@ -34,6 +34,6 @@ def serve():
 
 
 if __name__ == '__main__':
-    NEARBY_SERVER_IP = input('Enter Nearby Server IP : ')
-    NEARBY_SERVER_PORT = input('Enter Nearby Server Port : ')
+    #NEARBY_SERVER_IP = input('Enter Nearby Server IP : ')
+    #NEARBY_SERVER_PORT = input('Enter Nearby Server Port : ')
     serve()
