@@ -117,6 +117,7 @@ def serve(serverPort):
     ContentProvider_Server_pb2_grpc.add_ContentProvider_ServerServicer_to_server(FileTransmitService(), server)
     server.add_insecure_port('[::]:' + serverPort)
     server.start()
+    print("Server Listening to Requests...")
     try:
         while True:
             time.sleep(300)
